@@ -1,6 +1,9 @@
 import React, { useReducer } from 'react'
 import { Grid, TextField, Button } from '@material-ui/core'
+import debounce from 'awesome-debounce-promise'
 import { getPace } from './utils'
+
+const INPUT_DEBOUNCE_TIME = 2000
 
 const initialState = { time: '', distance: '', pace: '' }
 function reducer(state, action) {
@@ -37,14 +40,14 @@ function setPace(pace) {
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  function handleTimeChange(ev) {
-    const { value } = ev.target
-    dispatch(setTime(value))
-  }
-  function handleDistanceChange(ev) {
-    const { value } = ev.target
-    dispatch(setDistance(value))
-  }
+  const debouncedTimeChange = debounce(
+    async value => await dispatch(setTime(value)),
+    INPUT_DEBOUNCE_TIME
+  )
+  const debouncedDistanceChange = debounce(
+    async value => await dispatch(setDistance(value)),
+    INPUT_DEBOUNCE_TIME
+  )
   function handleCalculate() {
     const { time, distance } = state
     const pace = getPace(time, distance).for(100)
@@ -60,7 +63,7 @@ function App() {
           margin="dense"
           label="Time"
           placeholder="e.g. 12:10.9"
-          onChange={handleTimeChange}
+          onChange={e => debouncedTimeChange(e.target.value)}
         />
       </Grid>
       <Grid item xs={6}>
@@ -70,7 +73,7 @@ function App() {
           margin="dense"
           label="Distance (in meters)"
           placeholder="e.g 800"
-          onChange={handleDistanceChange}
+          onChange={e => debouncedDistanceChange(e.target.value)}
         />
       </Grid>
       <Grid item xs={6}>
