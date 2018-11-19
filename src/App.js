@@ -55,6 +55,7 @@ function App() {
     <Grid container alignItems="center" spacing={8}>
       <Grid item xs={6}>
         <TextField
+          id="time"
           variant="outlined"
           margin="dense"
           label="Time"
@@ -64,6 +65,7 @@ function App() {
       </Grid>
       <Grid item xs={6}>
         <TextField
+          id="distance"
           variant="outlined"
           margin="dense"
           label="Distance (in meters)"
@@ -84,6 +86,7 @@ function App() {
       </Grid>
       <Grid item xs={6}>
         <TextField
+          id="pace"
           variant="outlined"
           margin="dense"
           label="Pace (100m)"
