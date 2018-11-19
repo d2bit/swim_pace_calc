@@ -1,3 +1,10 @@
+export function getTime(paceStr, distanceInMeters) {
+  const { timeInMillis: paceInMillis } = parseTime(paceStr)
+  const timeInMillis = (paceInMillis * distanceInMeters) / 100
+
+  return stringifyTime(timeInMillis)
+}
+
 export function getPace(timeStr, distanceInMeters) {
   const { timeInMillis } = parseTime(timeStr)
   const paceInMillis = timeInMillis / distanceInMeters
@@ -26,9 +33,7 @@ export function stringifyTime(inputInMillis) {
       ? `${result.toString().padStart(2, 0)}:`
       : `${minutes}:`
   }
-  if (seconds > 0) {
-    result += result.length ? `${seconds.toString().padStart(2, 0)}` : seconds
-  }
+  result += result.length ? `${seconds.toString().padStart(2, 0)}` : seconds
   if (milliseconds > 0) {
     result += `.${milliseconds.toString().replace(/0+$/, '')}`
   }

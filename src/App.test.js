@@ -46,3 +46,18 @@ it('Updates swimming pace filling the distance and having a time', () => {
   const paceInput = getByLabelText(/Pace/)
   expect(paceInput.value).toEqual('1:22.5')
 })
+
+it('Updates swimming time filling the pace and having a distance', () => {
+  const { getByLabelText } = render(<App />)
+
+  const distanceInput = getByLabelText(/Distance/)
+  fireEvent.change(distanceInput, { target: { value: '800' } })
+  fireEvent.blur(distanceInput, { target: { value: '800' } })
+
+  const paceInput = getByLabelText(/Pace/)
+  fireEvent.change(paceInput, { target: { value: '1:20' } })
+  fireEvent.blur(paceInput, { target: { value: '1:20' } })
+
+  const timeInput = getByLabelText(/Time/)
+  expect(timeInput.value).toEqual('10:40')
+})

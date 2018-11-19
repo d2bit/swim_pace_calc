@@ -1,4 +1,16 @@
-import { parseTime, stringifyTime, getPace } from './utils'
+import { parseTime, stringifyTime, getPace, getTime } from './utils'
+
+describe('getTime', () => {
+  it('converts pace and distance to time', () => {
+    const pace = '1:30'
+    const distance = 800
+    const expectedTime = '12:00'
+
+    const time = getTime(pace, distance)
+
+    expect(time).toEqual(expectedTime)
+  })
+})
 
 describe('getPace', () => {
   it('converts time and distance to pace', () => {

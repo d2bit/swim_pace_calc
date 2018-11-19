@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react'
 import { Grid, TextField, Button } from '@material-ui/core'
 import debounce from 'awesome-debounce-promise'
-import { getPace } from './utils'
+import { getPace, getTime } from './utils'
 
 const INPUT_DEBOUNCE_TIME = 2000
 
@@ -62,6 +62,10 @@ function App() {
   }
   function handlePaceChange(value) {
     dispatch(setPace(value))
+    if (state.distance) {
+      const time = getTime(value, state.distance)
+      dispatch(setTime(time))
+    }
   }
   function handleCalculate() {
     const { time, distance } = state
@@ -78,6 +82,8 @@ function App() {
           margin="dense"
           label="Time"
           placeholder="e.g. 12:10.9"
+          key={state.time}
+          defaultValue={state.time}
           onChange={e => debouncedTimeChange(e.target.value)}
           onBlur={e => handleTimeChange(e.target.value)}
         />
@@ -89,6 +95,8 @@ function App() {
           margin="dense"
           label="Distance (in meters)"
           placeholder="e.g 800"
+          key={state.distance}
+          defaultValue={state.distance}
           onChange={e => debouncedDistanceChange(e.target.value)}
           onBlur={e => handleDistanceChange(e.target.value)}
         />
