@@ -40,14 +40,29 @@ function setPace(pace) {
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const debouncedTimeChange = debounce(
-    async value => await dispatch(setTime(value)),
-    INPUT_DEBOUNCE_TIME
-  )
+  const debouncedTimeChange = debounce(handleTimeChange, INPUT_DEBOUNCE_TIME)
   const debouncedDistanceChange = debounce(
-    async value => await dispatch(setDistance(value)),
+    handleDistanceChange,
     INPUT_DEBOUNCE_TIME
   )
+  const debouncedPaceChange = debounce(handlePaceChange, INPUT_DEBOUNCE_TIME)
+  function handleTimeChange(value) {
+    dispatch(setTime(value))
+    if (state.distance) {
+      const pace = getPace(value, state.distance).for(100)
+      dispatch(setPace(pace))
+    }
+  }
+  function handleDistanceChange(value) {
+    dispatch(setDistance(value))
+    if (state.time) {
+      const pace = getPace(state.time, value).for(100)
+      dispatch(setPace(pace))
+    }
+  }
+  function handlePaceChange(value) {
+    dispatch(setPace(value))
+  }
   function handleCalculate() {
     const { time, distance } = state
     const pace = getPace(time, distance).for(100)
@@ -64,6 +79,7 @@ function App() {
           label="Time"
           placeholder="e.g. 12:10.9"
           onChange={e => debouncedTimeChange(e.target.value)}
+          onBlur={e => handleTimeChange(e.target.value)}
         />
       </Grid>
       <Grid item xs={6}>
@@ -74,6 +90,7 @@ function App() {
           label="Distance (in meters)"
           placeholder="e.g 800"
           onChange={e => debouncedDistanceChange(e.target.value)}
+          onBlur={e => handleDistanceChange(e.target.value)}
         />
       </Grid>
       <Grid item xs={6}>
@@ -94,7 +111,10 @@ function App() {
           margin="dense"
           label="Pace (100m)"
           placeholder="e.g 1:26.3"
-          value={state.pace}
+          key={state.pace}
+          defaultValue={state.pace}
+          onChange={e => debouncedPaceChange(e.target.value)}
+          onBlur={e => handlePaceChange(e.target.value)}
         />
       </Grid>
     </Grid>
