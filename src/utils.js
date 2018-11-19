@@ -1,3 +1,41 @@
+export function getPace(timeStr, distanceInMeters) {
+  const { timeInMillis } = parseTime(timeStr)
+  const paceInMillis = timeInMillis / distanceInMeters
+
+  const paceObject = {
+    for: distance => stringifyTime(paceInMillis * distance),
+  }
+  return paceObject
+}
+
+export function stringifyTime(inputInMillis) {
+  let result = ''
+  const date = new Date(null)
+  date.setMilliseconds(inputInMillis)
+
+  const hours = date.getUTCHours()
+  const minutes = date.getUTCMinutes()
+  const seconds = date.getUTCSeconds()
+  const milliseconds = date.getUTCMilliseconds()
+
+  if (hours > 0) {
+    result += `${hours}:`
+  }
+  if (minutes > 0) {
+    result += result.length
+      ? `${result.toString().padStart(2, 0)}:`
+      : `${minutes}:`
+  }
+  if (seconds > 0) {
+    result += result.length ? `${seconds.toString().padStart(2, 0)}` : seconds
+  }
+  if (milliseconds > 0) {
+    result += `.${milliseconds.toString().replace(/0+$/, '')}`
+  }
+
+  return result
+}
+
 export function parseTime(input) {
   const matcher = /((\d+):)?((\d{1,2}):)?(\d{1,2})(\.(\d{1,3}))?/
 

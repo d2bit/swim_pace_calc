@@ -1,4 +1,59 @@
-import { parseTime } from './utils'
+import { parseTime, stringifyTime, getPace } from './utils'
+
+describe('getPace', () => {
+  it('converts time and distance to pace', () => {
+    const time = '12:00'
+    const distance = 800
+    const pace = getPace(time, distance)
+
+    const expectedHundredPace = '1:30'
+    const expectedFiftyPace = '45'
+    const expectedTwentyFivePace = '22.5'
+
+    const hundredPace = pace.for(100)
+    expect(hundredPace).toEqual(expectedHundredPace)
+
+    const fiftyPace = pace.for(50)
+    expect(fiftyPace).toEqual(expectedFiftyPace)
+
+    const twentyFivePace = pace.for(25)
+    expect(twentyFivePace).toEqual(expectedTwentyFivePace)
+  })
+})
+
+describe('stringifyTime', () => {
+  it('returns minutes:seconds', () => {
+    const timeInMillis = 67000
+    const expectedTime = '1:07'
+
+    const time = stringifyTime(timeInMillis)
+    expect(time).toEqual(expectedTime)
+  })
+
+  it('returns minutes:seconds.millis', () => {
+    const timeInMillis = 67810
+    const expectedTime = '1:07.81'
+
+    const time = stringifyTime(timeInMillis)
+    expect(time).toEqual(expectedTime)
+  })
+
+  it('returns seconds', () => {
+    const timeInMillis = 17000
+    const expectedTime = '17'
+
+    const time = stringifyTime(timeInMillis)
+    expect(time).toEqual(expectedTime)
+  })
+
+  it('returns seconds.millis', () => {
+    const timeInMillis = 7810
+    const expectedTime = '7.81'
+
+    const time = stringifyTime(timeInMillis)
+    expect(time).toEqual(expectedTime)
+  })
+})
 
 describe('parseTime', () => {
   it('parses seconds.millis to millis', () => {
