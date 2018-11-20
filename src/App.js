@@ -40,33 +40,66 @@ function setPace(pace) {
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  const debouncedTimeChange = debounce(handleTimeChange, INPUT_DEBOUNCE_TIME)
-  const debouncedDistanceChange = debounce(
-    handleDistanceChange,
+  const debouncedTimeChange = debounce(
+    timeChangeSideEffects,
     INPUT_DEBOUNCE_TIME
   )
-  const debouncedPaceChange = debounce(handlePaceChange, INPUT_DEBOUNCE_TIME)
-  function handleTimeChange(value) {
+  function handleTimeChange(e) {
+    const { value } = e.target
+    debouncedTimeChange(value)
+  }
+  function handleTimeBlur(e) {
+    const { value } = e.target
     dispatch(setTime(value))
+    timeChangeSideEffects(value)
+  }
+  function timeChangeSideEffects(value) {
     if (state.distance) {
       const pace = getPace(value, state.distance).for(100)
       dispatch(setPace(pace))
     }
   }
-  function handleDistanceChange(value) {
+
+  const debouncedDistanceChange = debounce(
+    distanceChangeSideEffects,
+    INPUT_DEBOUNCE_TIME
+  )
+  function handleDistanceChange(e) {
+    const { value } = e.target
+    debouncedDistanceChange(value)
+  }
+  function handleDistanceBlur(e) {
+    const { value } = e.target
     dispatch(setDistance(value))
+    distanceChangeSideEffects(value)
+  }
+  function distanceChangeSideEffects(value) {
     if (state.time) {
       const pace = getPace(state.time, value).for(100)
       dispatch(setPace(pace))
     }
   }
-  function handlePaceChange(value) {
+
+  const debouncedPaceChange = debounce(
+    paceChangeSideEffects,
+    INPUT_DEBOUNCE_TIME
+  )
+  function handlePaceChange(e) {
+    const { value } = e.target
+    debouncedPaceChange(value)
+  }
+  function handlePaceBlur(e) {
+    const { value } = e.target
     dispatch(setPace(value))
+    paceChangeSideEffects(value)
+  }
+  function paceChangeSideEffects(value) {
     if (state.distance) {
       const time = getTime(value, state.distance)
       dispatch(setTime(time))
     }
   }
+
   function handleCalculate() {
     const { time, distance } = state
     const pace = getPace(time, distance).for(100)
@@ -82,11 +115,11 @@ function App() {
           margin="dense"
           label="Time"
           placeholder="e.g. 12:10.9"
-          inputProps={{ inputmode: 'numeric' }}
+          inputProps={{ inputMode: 'numeric' }}
           key={state.time}
           defaultValue={state.time}
-          onChange={e => debouncedTimeChange(e.target.value)}
-          onBlur={e => handleTimeChange(e.target.value)}
+          onChange={handleTimeChange}
+          onBlur={handleTimeBlur}
         />
       </Grid>
       <Grid item xs={6}>
@@ -96,11 +129,11 @@ function App() {
           margin="dense"
           label="Distance (in meters)"
           placeholder="e.g 800"
-          inputProps={{ inputmode: 'numeric' }}
+          inputProps={{ inputMode: 'numeric' }}
           key={state.distance}
           defaultValue={state.distance}
-          onChange={e => debouncedDistanceChange(e.target.value)}
-          onBlur={e => handleDistanceChange(e.target.value)}
+          onChange={handleDistanceChange}
+          onBlur={handleDistanceBlur}
         />
       </Grid>
       <Grid item xs={6}>
@@ -121,11 +154,11 @@ function App() {
           margin="dense"
           label="Pace (100m)"
           placeholder="e.g 1:26.3"
-          inputProps={{ inputmode: 'numeric' }}
+          inputProps={{ inputMode: 'numeric' }}
           key={state.pace}
           defaultValue={state.pace}
-          onChange={e => debouncedPaceChange(e.target.value)}
-          onBlur={e => handlePaceChange(e.target.value)}
+          onChange={handlePaceChange}
+          onBlur={handlePaceBlur}
         />
       </Grid>
     </Grid>
