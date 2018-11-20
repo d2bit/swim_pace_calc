@@ -1,68 +1,26 @@
-import React, { useReducer } from 'react'
+import React from 'react'
 import { Grid, TextField } from '@material-ui/core'
 import debounce from 'awesome-debounce-promise'
+import useInputs from './useInputs'
 import { getPace, getTime, isValidTime, formatTime } from './utils'
 
 const INPUT_DEBOUNCE_TIME = 2000
 
-const initialState = { time: '', distance: '', pace: '' }
-function reducer(state, action) {
-  switch (action.type) {
-    case 'SET_TIME':
-      return { ...state, time: action.time, timeError: false }
-    case 'SET_DISTANCE':
-      return { ...state, distance: action.distance, distanceError: false }
-    case 'SET_PACE':
-      return { ...state, pace: action.pace, paceError: false }
-    case 'SET_TIME_ERROR':
-      return { ...state, timeError: true }
-    case 'SET_DISTANCE_ERROR':
-      return { ...state, distanceError: true }
-    case 'SET_PACE_ERROR':
-      return { ...state, paceError: true }
-    default:
-      return state
-  }
-}
-function setTime(time) {
-  return {
-    type: 'SET_TIME',
-    time,
-  }
-}
-function setDistance(distance) {
-  return {
-    type: 'SET_DISTANCE',
-    distance,
-  }
-}
-function setPace(pace) {
-  return {
-    type: 'SET_PACE',
-    pace,
-  }
-}
-function setTimeError(time) {
-  return {
-    type: 'SET_TIME_ERROR',
-    time,
-  }
-}
-function setDistanceError(distance) {
-  return {
-    type: 'SET_DISTANCE_ERROR',
-    distance,
-  }
-}
-function setPaceError(pace) {
-  return {
-    type: 'SET_PACE_ERROR',
-    pace,
-  }
-}
-
 function App() {
-  const [state, dispatch] = useReducer(reducer, initialState)
+  const {
+    time,
+    setTime,
+    timeError,
+    setTimeError,
+    distance,
+    setDistance,
+    distanceError,
+    setDistanceError,
+    pace,
+    setPace,
+    paceError,
+    setPaceError,
+  } = useInputs()
 
   const debouncedTimeChange = debounce(
     timeChangeSideEffects,
@@ -75,18 +33,18 @@ function App() {
   function handleTimeBlur(e) {
     const value = e.target.value.replace(',', ':')
     if (value && !isValidTime(value)) {
-      return dispatch(setTimeError(value))
+      return setTimeError(value)
     }
-    dispatch(setTime(formatTime(value)))
+    setTime(formatTime(value))
     timeChangeSideEffects(value)
   }
   function timeChangeSideEffects(value) {
     if (!value || !isValidTime(value)) {
-      return dispatch(setTimeError(value))
+      return setTimeError(value)
     }
-    if (state.distance) {
-      const pace = getPace(value, state.distance).for(100)
-      dispatch(setPace(pace))
+    if (distance) {
+      const pace = getPace(value, distance).for(100)
+      setPace(pace)
     }
   }
 
@@ -101,21 +59,21 @@ function App() {
   function handleDistanceBlur(e) {
     const value = e.target.value
     if ((value && isNaN(value)) || parseInt(value) <= 0) {
-      return dispatch(setDistanceError(value))
+      return setDistanceError(value)
     }
-    dispatch(setDistance(value))
+    setDistance(value)
     distanceChangeSideEffects(value)
   }
   function distanceChangeSideEffects(value) {
     if (!value || isNaN(value) || parseInt(value) <= 0) {
-      return dispatch(setDistanceError(value))
+      return setDistanceError(value)
     }
-    if (state.time) {
-      const pace = getPace(state.time, value).for(100)
-      dispatch(setPace(pace))
-    } else if (state.pace) {
-      const time = getTime(state.pace, value)
-      dispatch(setTime(time))
+    if (time) {
+      const pace = getPace(time, value).for(100)
+      setPace(pace)
+    } else if (pace) {
+      const time = getTime(pace, value)
+      setTime(time)
     }
   }
 
@@ -130,18 +88,18 @@ function App() {
   function handlePaceBlur(e) {
     const value = e.target.value.replace(',', ':')
     if (value && !isValidTime(value)) {
-      return dispatch(setPaceError(value))
+      return setPaceError(value)
     }
-    dispatch(setPace(formatTime(value)))
+    setPace(formatTime(value))
     paceChangeSideEffects(value)
   }
   function paceChangeSideEffects(value) {
     if (!isValidTime(value)) {
-      return dispatch(setPaceError(value))
+      return setPaceError(value)
     }
-    if (state.distance) {
-      const time = getTime(value, state.distance)
-      dispatch(setTime(time))
+    if (distance) {
+      const time = getTime(value, distance)
+      setTime(time)
     }
   }
 
@@ -156,9 +114,9 @@ function App() {
           label="Time"
           placeholder="e.g. 12:10.9"
           inputProps={{ inputMode: 'numeric' }}
-          key={state.time}
-          defaultValue={state.time}
-          error={state.timeError}
+          key={time}
+          defaultValue={time}
+          error={timeError}
           onChange={handleTimeChange}
           onBlur={handleTimeBlur}
         />
@@ -172,9 +130,9 @@ function App() {
           label="Distance (in meters)"
           placeholder="e.g 800"
           inputProps={{ inputMode: 'numeric' }}
-          key={state.distance}
-          defaultValue={state.distance}
-          error={state.distanceError}
+          key={distance}
+          defaultValue={distance}
+          error={distanceError}
           onChange={handleDistanceChange}
           onBlur={handleDistanceBlur}
         />
@@ -188,9 +146,9 @@ function App() {
           label="Pace (100m)"
           placeholder="e.g 1:26.3"
           inputProps={{ inputMode: 'numeric' }}
-          key={state.pace}
-          defaultValue={state.pace}
-          error={state.paceError}
+          key={pace}
+          defaultValue={pace}
+          error={paceError}
           onChange={handlePaceChange}
           onBlur={handlePaceBlur}
         />
