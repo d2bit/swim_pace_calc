@@ -41,6 +41,14 @@ describe('getPace', () => {
 })
 
 describe('stringifyTime', () => {
+  it('returns hours:minutes:seconds', () => {
+    const timeInMillis = 7200000
+    const expectedTime = '2:00:00'
+
+    const time = stringifyTime(timeInMillis)
+    expect(time).toEqual(expectedTime)
+  })
+
   it('returns minutes:seconds', () => {
     const timeInMillis = 67000
     const expectedTime = '1:07'

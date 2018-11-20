@@ -30,9 +30,9 @@ export function stringifyTime(inputInMillis) {
   if (hours > 0) {
     result += `${hours}:`
   }
-  if (minutes > 0) {
+  if (result.length || minutes > 0) {
     result += result.length
-      ? `${result.toString().padStart(2, 0)}:`
+      ? `${minutes.toString().padStart(2, 0)}:`
       : `${minutes}:`
   }
   result += result.length ? `${seconds.toString().padStart(2, 0)}` : seconds

@@ -55,3 +55,17 @@ it('Allows using , intead of : (mobile friendly)', async () => {
   await waitForElement(() => getByValue('1:50'))
   //expect(paceInput.value).toEqual('1:50')
 })
+
+it('BUG - set distance and pace to have a >1hour swim', () => {
+  const { getByLabelText } = render(<App />)
+
+  const distanceInput = getByLabelText(/Distance/)
+  fireEvent.change(distanceInput, { target: { value: '8000' } })
+  fireEvent.blur(distanceInput, { target: { value: '8000' } })
+  const paceInput = getByLabelText(/Pace/)
+  fireEvent.change(paceInput, { target: { value: '1,3' } })
+  fireEvent.blur(paceInput, { target: { value: '1,3' } })
+
+  const timeInput = getByLabelText(/Time/)
+  expect(timeInput.value).toEqual('2:00:00')
+})
