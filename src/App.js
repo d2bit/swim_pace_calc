@@ -82,6 +82,7 @@ function App() {
           margin="dense"
           label="Time"
           placeholder="e.g. 12:10.9"
+          inputProps={{ inputmode: 'numeric' }}
           key={state.time}
           defaultValue={state.time}
           onChange={e => debouncedTimeChange(e.target.value)}
@@ -95,6 +96,7 @@ function App() {
           margin="dense"
           label="Distance (in meters)"
           placeholder="e.g 800"
+          inputProps={{ inputmode: 'numeric' }}
           key={state.distance}
           defaultValue={state.distance}
           onChange={e => debouncedDistanceChange(e.target.value)}
@@ -119,6 +121,7 @@ function App() {
           margin="dense"
           label="Pace (100m)"
           placeholder="e.g 1:26.3"
+          inputProps={{ inputmode: 'numeric' }}
           key={state.pace}
           defaultValue={state.pace}
           onChange={e => debouncedPaceChange(e.target.value)}
