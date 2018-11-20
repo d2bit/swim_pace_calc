@@ -41,8 +41,14 @@ export function stringifyTime(inputInMillis) {
   return result
 }
 
+const TIME_MATCHER = /^((\d+):)?((\d{1,2}):)?(\d{1,2})(\.(\d{1,3}))?$/
+export function isValidTime(input) {
+  const matcher = TIME_MATCHER
+  return matcher.test(input)
+}
+
 export function parseTime(input) {
-  const matcher = /((\d+):)?((\d{1,2}):)?(\d{1,2})(\.(\d{1,3}))?/
+  const matcher = TIME_MATCHER
 
   const matches = matcher.exec(input)
 

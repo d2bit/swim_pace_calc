@@ -1,4 +1,10 @@
-import { parseTime, stringifyTime, getPace, getTime } from './utils'
+import {
+  isValidTime,
+  parseTime,
+  stringifyTime,
+  getPace,
+  getTime,
+} from './utils'
 
 describe('getTime', () => {
   it('converts pace and distance to time', () => {
@@ -64,6 +70,24 @@ describe('stringifyTime', () => {
 
     const time = stringifyTime(timeInMillis)
     expect(time).toEqual(expectedTime)
+  })
+})
+
+describe('isValidTime', () => {
+  it('returns true for valid string time inputs', () => {
+    const times = ['12', '12:00', '12:00.2', '1:15:30.5']
+
+    times.forEach(time => {
+      expect(isValidTime(time)).toBe(true)
+    })
+  })
+
+  it('returns false for valid string time inputs', () => {
+    const times = ['string', '12,00']
+
+    times.forEach(time => {
+      expect(isValidTime(time)).toBe(false)
+    })
   })
 })
 
