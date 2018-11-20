@@ -42,6 +42,7 @@ function App() {
     if (!value || !isValidTime(value)) {
       return setTimeError(value)
     }
+    if (value === time) return
     if (distance) {
       const pace = getPace(value, distance).for(100)
       setPace(pace)
@@ -68,6 +69,7 @@ function App() {
     if (!value || isNaN(value) || parseInt(value) <= 0) {
       return setDistanceError(value)
     }
+    if (value === distance) return
     if (time) {
       const pace = getPace(time, value).for(100)
       setPace(pace)
@@ -97,6 +99,7 @@ function App() {
     if (!isValidTime(value)) {
       return setPaceError(value)
     }
+    if (value === pace) return
     if (distance) {
       const time = getTime(value, distance)
       setTime(time)
