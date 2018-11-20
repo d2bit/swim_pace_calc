@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react'
-import { Grid, TextField, Button } from '@material-ui/core'
+import { Grid, TextField } from '@material-ui/core'
 import debounce from 'awesome-debounce-promise'
 import { getPace, getTime, isValidTime } from './utils'
 
@@ -145,19 +145,14 @@ function App() {
     }
   }
 
-  function handleCalculate() {
-    const { time, distance } = state
-    const pace = getPace(time, distance).for(100)
-    dispatch(setPace(pace))
-  }
-
   return (
-    <Grid container alignItems="center" spacing={8}>
-      <Grid item xs={6}>
+    <Grid container alignItems="center" justify="center" spacing={8}>
+      <Grid item xs={10}>
         <TextField
           id="time"
           variant="outlined"
           margin="dense"
+          fullWidth
           label="Time"
           placeholder="e.g. 12:10.9"
           inputProps={{ inputMode: 'numeric' }}
@@ -168,11 +163,12 @@ function App() {
           onBlur={handleTimeBlur}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={10}>
         <TextField
           id="distance"
           variant="outlined"
           margin="dense"
+          fullWidth
           label="Distance (in meters)"
           placeholder="e.g 800"
           inputProps={{ inputMode: 'numeric' }}
@@ -183,22 +179,12 @@ function App() {
           onBlur={handleDistanceBlur}
         />
       </Grid>
-      <Grid item xs={6}>
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          fullWidth
-          onClick={handleCalculate}
-        >
-          Calculate
-        </Button>
-      </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={10}>
         <TextField
           id="pace"
           variant="outlined"
           margin="dense"
+          fullWidth
           label="Pace (100m)"
           placeholder="e.g 1:26.3"
           inputProps={{ inputMode: 'numeric' }}

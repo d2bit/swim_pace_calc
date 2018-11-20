@@ -12,9 +12,6 @@ it('Calculates swimming pace clicking on Calculate button', () => {
   fireEvent.change(distanceInput, { target: { value: '800' } })
   fireEvent.blur(distanceInput, { target: { value: '800' } })
 
-  const calculateBtn = getByText('Calculate')
-  fireEvent.click(calculateBtn)
-
   const paceInput = getByLabelText(/Pace/)
   expect(paceInput.value).toEqual('1:30')
 })
