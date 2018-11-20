@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react'
 import { Grid, TextField } from '@material-ui/core'
 import debounce from 'awesome-debounce-promise'
-import { getPace, getTime, isValidTime } from './utils'
+import { getPace, getTime, isValidTime, formatTime } from './utils'
 
 const INPUT_DEBOUNCE_TIME = 2000
 
@@ -77,7 +77,7 @@ function App() {
     if (value && !isValidTime(value)) {
       return dispatch(setTimeError(value))
     }
-    dispatch(setTime(value))
+    dispatch(setTime(formatTime(value)))
     timeChangeSideEffects(value)
   }
   function timeChangeSideEffects(value) {
@@ -132,7 +132,7 @@ function App() {
     if (value && !isValidTime(value)) {
       return dispatch(setPaceError(value))
     }
-    dispatch(setPace(value))
+    dispatch(setPace(formatTime(value)))
     paceChangeSideEffects(value)
   }
   function paceChangeSideEffects(value) {

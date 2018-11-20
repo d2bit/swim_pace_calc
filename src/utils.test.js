@@ -1,5 +1,6 @@
 import {
   isValidTime,
+  formatTime,
   parseTime,
   stringifyTime,
   getPace,
@@ -91,7 +92,24 @@ describe('isValidTime', () => {
   })
 })
 
+describe('formatTime', () => {
+  it('reformarts the time string', () => {
+    const time = '1:3'
+    const formattedTime = formatTime(time)
+    const expectedTime = '1:30'
+
+    expect(formattedTime).toEqual(expectedTime)
+  })
+})
+
 describe('parseTime', () => {
+  it('parses one digit seconds as x10', () => {
+    const time = '1:3'
+    const expectedMilliseconds = 90000
+    const parsedTime = parseTime(time)
+
+    expect(parsedTime.timeInMillis).toEqual(expectedMilliseconds)
+  })
   it('parses seconds.millis to millis', () => {
     const time = '17.83'
     const expectedMilliseconds = 17830
